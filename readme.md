@@ -183,6 +183,22 @@ In short, we treat frameworks as utilities, not as architecture. This gives us t
 
 ---
 
+## Example Conversations
+
+Below are some sample interactions between users and the SecureShield Insurance Support system.
+<img width="1499" alt="image 4" src="https://github.com/user-attachments/assets/e3783ec6-c99d-446c-bcad-91beeecf57ca" />
+<img width="1465" alt="image" src="https://github.com/user-attachments/assets/8ebb84b5-c0e0-497a-acee-2b287ee96995" />
+<img width="1506" alt="image 3" src="https://github.com/user-attachments/assets/5239f492-6836-4fcb-bd20-c9178c8164f1" />
+
+
+These examples demonstrate:
+
+- Precise retrieval of insurance details (e.g., deductibles, copays, exclusions)
+- Rejecting questions which are not relevant to the use case
+- Structured formatting and chunk-aware responses
+- Real-time streaming feedback in the fronten
+
+
 ## File Reference
 
 - **Data Pipeline:**
