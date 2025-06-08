@@ -10,8 +10,6 @@ SecureShield Insurance Support is an end-to-end Agentic RAG system designed to p
 
 ## AI Frameworks Used
 
-While many modern RAG systems rely heavily on end-to-end orchestration frameworks like LangChain or LlamaIndex, SecureShield takes a more deliberate and minimalist approach.
-
 ### What We Use:
 
 - **LlamaIndex Parser**  
