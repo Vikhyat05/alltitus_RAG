@@ -1,10 +1,45 @@
-# SecureShield Insurance Support – RAG System
+# SecureShield Insurance Support – Agentic RAG System
 
 ## Overview
 
-SecureShield Insurance Support is an end-to-end Retrieval-Augmented Generation (RAG) system designed to provide accurate, evidence-based answers to insurance-related queries. The system leverages LLMs (OpenAI GPT-4), semantic search over vectorized insurance documents, and a modern web frontend to deliver a friendly, reliable insurance assistant.
+SecureShield Insurance Support is an end-to-end Agentic RAG system designed to provide accurate, evidence-based answers to insurance-related queries. The system leverages LLMs (OpenAI GPT-4), semantic search over vectorized insurance documents, and a modern web frontend to deliver a friendly, reliable insurance assistant.
 
 ---
+
+## AI Frameworks Used
+
+While many modern RAG systems rely heavily on end-to-end orchestration frameworks like LangChain or LlamaIndex, SecureShield takes a more deliberate and minimalist approach.
+
+### What We Use:
+
+- **LlamaIndex Parser**  
+  Used exclusively for parsing and converting insurance PDFs into markdown format (`Data/parse.py`). Its reliability in structured document extraction made it ideal for this preprocessing step.
+
+- **LangChain (Text Splitter Only)**  
+  We use LangChain’s `RecursiveCharacterTextSplitter` in `Data/embeddings.py` to intelligently chunk the cleaned text into overlapping windows. This preserves semantic coherence across chunks without introducing complexity.
+
+### What We Don’t Use:
+
+We **do not** use LlamaIndex or LangChain for RAG orchestration, agent logic, memory, or retrieval workflows.
+
+### Why We Avoided Full Framework Abstractions:
+
+- ✅ **Full Transparency & Debuggability**  
+  Custom Python gives us end-to-end visibility over prompt construction, response streaming, memory updates, and function-calling flows — critical when working in regulated domains like insurance.
+
+- ✅ **Agentic Flexibility**  
+  With core logic fully in Python (`backend/core/`), we can fine-tune the control flow of LLM reasoning, retrieval invocation, and response formatting — something frameworks often abstract away or constrain.
+
+- ✅ **Less Overhead**  
+  Reduced dependencies, lower cold-start time, and easier deployment, especially on minimal hosting environments like Render or simple containers.
+
+- ✅ **Better Prompt Discipline**  
+  Frameworks often bundle defaults or implicit behavior; our approach guarantees strict prompt enforcement through `prompt.py`.
+
+- ✅ **RAG-as-Code Philosophy**  
+  We treat RAG not as a black box, but as a programmable pipeline — this philosophy keeps the stack lightweight, auditable, and extensible.
+
+In short, we treat frameworks as utilities, not as architecture. This gives us the best of both worlds: ergonomic tools for preprocessing, and total control for reasoning and retrieval.
 
 ## Architecture
 
