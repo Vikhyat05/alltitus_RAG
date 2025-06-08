@@ -4,6 +4,8 @@
 
 SecureShield Insurance Support is an end-to-end Agentic RAG system designed to provide accurate, evidence-based answers to insurance-related queries. The system leverages LLMs (OpenAI GPT-4), semantic search over vectorized insurance documents, and a modern web frontend to deliver a friendly, reliable insurance assistant.
 
+<img width="1512" alt="image" src="https://github.com/user-attachments/assets/38e5f36c-4833-483f-bfbe-b69afe8966fb" />
+
 ---
 
 ## AI Frameworks Used
