@@ -50,12 +50,9 @@ inputText.addEventListener("input", function () {
 
 newChatButton.addEventListener("click", async () => {
   try {
-    const response = await fetch(
-      `http://localhost:8000/reset_chat?session_id=${sessionId}`,
-      {
-        method: "POST",
-      }
-    );
+    const response = await fetch(`/reset_chat?session_id=${sessionId}`, {
+      method: "POST",
+    });
 
     if (!response.ok) {
       console.error("Error resetting chat:", response.statusText);
@@ -162,7 +159,7 @@ sendButton.onclick = async () => {
   const typingIndicator = showTypingIndicator();
 
   try {
-    const response = await fetch("http://localhost:8000/chat", {
+    const response = await fetch("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message, session_id: sessionId }),
