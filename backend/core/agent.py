@@ -13,6 +13,16 @@ load_dotenv()
 
 
 async def assistant_response(memory):
+    """
+    Asynchronously streams responses from the OpenAI assistant using the given chat history.
+
+    Args:
+        memory (list): The list of past chat messages to provide context to the assistant.
+
+    Yields:
+        dict: A chunk of the streamed response from the assistant.
+    """
+
     response = await global_client.chat.completions.create(
         model="gpt-4.1",
         messages=memory,
@@ -25,9 +35,23 @@ async def assistant_response(memory):
         yield chunk
 
 
-async def get_response(
-    raw_message: str, custom_session_id: Optional[str]
-) -> AsyncIterable[str]:
+async def get_response(raw_message: str, custom_session_id: Optional[str]):
+    """
+    Handles a single user message, streams the assistant's response, and updates the session history.
+
+    This function:
+    - Adds the new user message to the session memory.
+    - Streams assistant response via OpenAI's function-calling API.
+    - Handles function calls if returned.
+    - Accumulates and updates final assistant response in memory.
+
+    Args:
+        raw_message (str): The user's message input.
+        custom_session_id (Optional[str]): Unique identifier for the chat session.
+
+    Yields:
+        str: Chunks of the assistant's response as Server-Sent Events (SSE) with the prefix "data: ".
+    """
 
     history = ""
     messages = {"role": "user", "content": raw_message}
