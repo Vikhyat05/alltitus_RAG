@@ -29,16 +29,18 @@ async def get_response(
     raw_message: str, custom_session_id: Optional[str]
 ) -> AsyncIterable[str]:
 
+    history = ""
     messages = {"role": "user", "content": raw_message}
     memory.update_chat_history(custom_session_id, messages)
     history = memory.get_chat_history(custom_session_id)
     response_finished = True
     function_calling = False
-    print(history)
+    print("HISTORY______", history)
 
     while True:
         current_function = {"name": "", "arguments": ""}
         function_arg = ""
+        assistant_accumulator = ""
 
         async for chunk in assistant_response(history):
 
@@ -78,6 +80,7 @@ async def get_response(
 
             elif delta.get("content") is not None and finish_reason != "function_call":
                 response_finished = False
+                assistant_accumulator += delta["content"]
                 yield "data: " + json.dumps(chunk) + "\n\n"
 
         if function_calling:
@@ -104,3 +107,11 @@ async def get_response(
 
         if response_finished:
             break
+
+    if assistant_accumulator:
+        print("Final assistant response:", assistant_accumulator)
+        print("Updating chat history with assistant response")
+        memory.update_chat_history(
+            custom_session_id,
+            {"role": "assistant", "content": assistant_accumulator},
+        )

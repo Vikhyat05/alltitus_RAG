@@ -32,15 +32,13 @@ async def reset_chat(session_id: str = Query(..., description="Session ID to res
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: str
 
 
 @router.post("/chat")
 async def chat(req: ChatRequest):
-    session_id = "chat-session"  # could be dynamic per user
-    # memory.initialize_session(session_id)
-
     async def stream_from_agent():
-        async for chunk in get_response(req.message, session_id):
+        async for chunk in get_response(req.message, req.session_id):
             if chunk.startswith("data:"):
                 try:
                     data = json.loads(chunk[len("data: ") :])

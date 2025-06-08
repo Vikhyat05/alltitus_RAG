@@ -22,7 +22,7 @@ class Memory:
     def clear_session(self, session_id: str):
         # Remove the chat history from memory once the session is complete
         if session_id in self.sessions:
-            del self.sessions[session_id]
+            self.sessions.pop(session_id, None)
 
 
 memory = Memory()
