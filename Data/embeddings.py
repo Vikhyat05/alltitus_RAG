@@ -22,6 +22,16 @@ splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
 
 
 def get_text_chunks(file_path):
+    """
+    Reads a text or markdown file and splits it into smaller text chunks
+    for embedding using Langchain's RecursiveCharacterTextSplitter.
+
+    Args:
+        file_path (str): Path to the text file.
+
+    Returns:
+        list[str]: A list of text chunks.
+    """
     with open(file_path, "r", encoding="utf-8") as f:
         text = f.read()
     text = text.replace("\n", " ")
@@ -30,6 +40,15 @@ def get_text_chunks(file_path):
 
 
 def get_embeddings(texts):
+    """
+    Generates embeddings for a list of text chunks using OpenAI's embedding model.
+
+    Args:
+        texts (list[str]): List of text strings to embed.
+
+    Returns:
+        list[list[float]]: List of embedding vectors corresponding to each text chunk.
+    """
     response = openai_client.embeddings.create(
         model="text-embedding-3-small", input=texts
     )
@@ -37,6 +56,14 @@ def get_embeddings(texts):
 
 
 def upload_to_supabase(chunks, embeddings, source_file):
+    """
+    Uploads text chunks and their embeddings to the Supabase `markdown_docs` table.
+
+    Args:
+        chunks (list[str]): Text chunks to store.
+        embeddings (list[list[float]]): Corresponding embedding vectors.
+        source_file (str): Name of the source file for metadata tracking.
+    """
     for chunk, embed in zip(chunks, embeddings):
         supabase.table("markdown_docs").insert(
             {"content": chunk, "embedding": embed, "metadata": {"source": source_file}}
@@ -44,11 +71,21 @@ def upload_to_supabase(chunks, embeddings, source_file):
 
 
 def process_file(file_path):
+    """
+    Processes a single file by:
+    - Splitting into chunks,
+    - Embedding each chunk,
+    - Uploading the results to Supabase.
+
+    Args:
+        file_path (str): Path to the file to process.
+    """
     chunks = get_text_chunks(file_path)
     embeddings = get_embeddings(chunks)
     upload_to_supabase(chunks, embeddings, os.path.basename(file_path))
 
 
+# === Batch Processing All .txt Files in Folder ===
 folder = "./cleaned"
 for fname in os.listdir(folder):
     if fname.endswith(".txt"):

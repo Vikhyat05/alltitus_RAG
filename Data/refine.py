@@ -14,6 +14,16 @@ supabase = create_client(supabase_url, supabase_service_role_key)
 
 
 def get_markdown_chunks(file_path):
+    """
+    Reads raw markdown content from the specified file and returns it as a single string,
+    with newline characters replaced by spaces to normalize formatting.
+
+    Args:
+        file_path (str): Path to the markdown file.
+
+    Returns:
+        str: Flattened markdown content as a single string.
+    """
     with open(file_path, "r") as f:
         raw_md = f.read()
 
@@ -25,8 +35,18 @@ def get_markdown_chunks(file_path):
 
 def format_markdown_with_gpt(markdown_text: str) -> str:
     """
-    Sends markdown to GPT-4 and asks it to return well-structured plain text
-    with headings, paragraphs, and tables converted into bullet lists.
+    Sends raw markdown text to GPT-4 and requests a cleaned, structured plain-text version.
+
+    The system prompt asks GPT to:
+    - Preserve heading hierarchy
+    - Convert tables into bullet points
+    - Produce RAG-friendly, well-chunked output
+
+    Args:
+        markdown_text (str): Raw markdown content as a string.
+
+    Returns:
+        str: Cleaned and structured plain text response from GPT-4.
     """
     system_prompt = (
         "You are a Markdown cleaner that converts raw markdown text into readable plain text. "
@@ -53,9 +73,15 @@ def format_markdown_with_gpt(markdown_text: str) -> str:
 
 def refine_text(file_path: str) -> str:
     """
-    Refines the markdown text from the file and returns the cleaned text.
-    """
+    Refines the content of a markdown file by converting it into readable plain text
+    using GPT formatting.
 
+    Args:
+        file_path (str): Path to the markdown (.md) file.
+
+    Returns:
+        str: Cleaned and formatted plain text.
+    """
     raw_text = get_markdown_chunks(file_path)
 
     refined_text = format_markdown_with_gpt(raw_text)
